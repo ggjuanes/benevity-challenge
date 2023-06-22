@@ -8,13 +8,9 @@ import io.vertx.core.Promise;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.CorsHandler;
 import io.vertx.ext.web.openapi.RouterBuilder;
-
 import java.util.Optional;
 
 public class MainVerticle extends AbstractVerticle {
-
-    private SignUpService signUpService;
-
     @Override
     public void start(Promise<Void> startPromise) {
         var connectionString = Optional.ofNullable(System.getenv("MONGO_DB_CONNECTION_STRING"))
@@ -22,7 +18,7 @@ public class MainVerticle extends AbstractVerticle {
         var database = Optional.ofNullable(System.getenv("MONGO_DB_DATABASE"))
                 .orElseGet(() -> System.getProperty("MONGO_DB_DATABASE"));
 
-        signUpService = new SignUpService(new MongoDbUserService(vertx, connectionString, database));
+        var signUpService = new SignUpService(new MongoDbUserService(vertx, connectionString, database));
         RouterBuilder.create(vertx, "server.yaml")
                 .map(routerBuilder -> {
                     routerBuilder

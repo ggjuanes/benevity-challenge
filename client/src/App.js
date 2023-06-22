@@ -10,6 +10,7 @@ import { Provider } from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Navbar from './Nav/components/Navbar';
 import SignUpPage from "./User/pages/SignUpPage";
+import LoginPage from "./User/pages/LoginPage";
 
 const theme = createTheme({
     palette: {
@@ -29,6 +30,7 @@ function App(props) {
                     <BrowserRouter>
                       <Switch>
                           <Route path="/signup" exact component={SignUpPage} />
+                          <Route path="/login" exact component={LoginPage} />
                           <Route path="/home" exact component={PostListPage} />
                           <Route path="/posts/:cuid/:slug" exact component={PostDetailPage} />
                       </Switch>

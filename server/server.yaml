@@ -34,4 +34,32 @@ paths:
                 properties:
                   message:
                     type: string
+  /login:
+    post:
+      summary: Log in
+      description: Log in
+      operationId: login
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: User created
+        '400':
+          description: Error on log in
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
 

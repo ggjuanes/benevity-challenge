@@ -11,6 +11,7 @@ function Navbar() {
                 <Typography variant="h6" >
                     <Link href="/home" className="text-white">Home</Link>
                     <Link href="/signup" className="text-white">Sign up</Link>
+                    <Link href="/login" className="text-white">Log in</Link>
                 </Typography>
             </Toolbar>
         </AppBar>
