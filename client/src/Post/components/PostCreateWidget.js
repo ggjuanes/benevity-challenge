@@ -39,7 +39,7 @@ const PostCreateWidget = ({ addPost }) => {
         <h3>Create new post</h3>
         <TextField variant="filled" label="Author name" name="name" onChange={handleChange} />
         <TextField variant="filled" label="Post title" name="title" onChange={handleChange} />
-        <TextField variant="filled" multiline rows="4" label="Post content" name="content" onChange={handleChange} />
+        <TextField variant="filled" multiline minRows="4" label="Post content" name="content" onChange={handleChange} />
         <Button className="mt-4" variant="contained" color="primary" onClick={() => submit()} disabled={!state.name || !state.title || !state.content}>
             Submit
         </Button>

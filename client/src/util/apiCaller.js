@@ -1,6 +1,6 @@
 import fetch from 'isomorphic-fetch';
 
-export const API_URL = 'http://localhost:3000/api';
+export const API_URL = 'http://localhost:8888';
 
 export default async (endpoint, method = 'get', body) => {
   return fetch(`${API_URL}/${endpoint}`, {

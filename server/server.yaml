@@ -1,0 +1,37 @@
+openapi: 3.0.0
+info:
+  title: 'Alaya Blog API'
+  description: 'Alaya Blog API'
+  version: 1.0.0
+servers:
+  - url: 'http://127.0.0.1:3000'
+paths:
+  /signup:
+    post:
+      summary: Signup
+      description: Signup
+      operationId: signup
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '201':
+          description: User created
+        '400':
+          description: Error on signup
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+

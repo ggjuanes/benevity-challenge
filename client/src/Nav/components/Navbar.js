@@ -9,7 +9,8 @@ function Navbar() {
         <AppBar position="fixed">
             <Toolbar>
                 <Typography variant="h6" >
-                    <Link href="/" className="text-white">Home</Link>
+                    <Link href="/home" className="text-white">Home</Link>
+                    <Link href="/signup" className="text-white">Sign up</Link>
                 </Typography>
             </Toolbar>
         </AppBar>

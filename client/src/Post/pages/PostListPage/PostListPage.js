@@ -54,5 +54,9 @@ PostListPage.propTypes = {
   showAddPost: PropTypes.bool.isRequired
 };
 
+PostListPage.defaultProps = {
+  showAddPost: true
+};
+
 
 export default PostListPage;
