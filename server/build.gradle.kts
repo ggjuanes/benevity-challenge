@@ -32,9 +32,14 @@ dependencies {
   implementation("io.vertx:vertx-web-openapi:$vertxVersion")
   implementation(platform("io.vertx:vertx-stack-depchain:$vertxVersion"))
   implementation("io.vertx:vertx-core")
+  implementation("io.vertx:vertx-mongo-client:4.4.4")
   testImplementation("io.vertx:vertx-junit5")
   testImplementation("org.junit.jupiter:junit-jupiter:$junitJupiterVersion")
   testImplementation("org.assertj:assertj-core:3.24.2")
+  testImplementation("org.mockito:mockito-core:3.+")
+  testImplementation("org.testcontainers:testcontainers:1.18.3")
+  testImplementation("org.testcontainers:junit-jupiter:1.18.3")
+  testImplementation("org.testcontainers:mongodb:1.18.3")
 }
 
 java {
