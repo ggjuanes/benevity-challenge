@@ -3,6 +3,7 @@ package com.ggjuanes.benevity_challenge.server;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpClient;
+import io.vertx.core.http.HttpClientResponse;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.auth.mongo.MongoAuthentication;
@@ -23,7 +24,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(VertxExtension.class)
 @Testcontainers
 public class TestMainVerticle {
-    public static final String LOGIN_URI = "/login";
     final MongoDBContainer mongoDBContainer = new MongoDBContainer(DockerImageName.parse("mongo:4.0.10"));
     private MongoClient mongoClient;
     private MongoAuthentication authenticationProvider;
@@ -46,18 +46,13 @@ public class TestMainVerticle {
 
     @Test
     void shouldSignUpANewUser(Vertx vertx, VertxTestContext testContext) {
-        HttpClient client = vertx.createHttpClient();
         var username = "test";
         var password = "testpw";
         var hashPassword = givenAHashedPassword(password);
-
-
         JsonObject query = new JsonObject()
                 .put("username", username);
-        client.request(HttpMethod.POST, 8888, "127.0.0.1", "/signup").compose(req -> {
-                    req.putHeader("content-type", "application/json");
-                    return req.send("{\"username\":\"" + username + "\",\"password\":\"" + password + "\"}");
-                })
+
+        whenSendingRequestForSignUpANewUser(vertx, username, password)
                 .onComplete(testContext.succeeding(response -> assertThat(response.statusCode()).isEqualTo(201)))
                 .compose(ign -> mongoClient.find("users", query))
                 .onComplete(testContext.succeeding(jsonList -> {
@@ -71,34 +66,23 @@ public class TestMainVerticle {
 
     @Test
     void shouldFailRequestIfUsernameIsTaken(Vertx vertx, VertxTestContext testContext) {
-        HttpClient client = vertx.createHttpClient();
         var username = "test";
         var password = "testpw";
 
         givenAUser(username, "fake-pw")
-                .compose(ign -> client.request(HttpMethod.POST, 8888, "127.0.0.1", "/signup"))
-                .map(req -> {
-                    req.putHeader("content-type", "application/json");
-                    return req;
-                })
-                .compose(req -> req.send("{\"username\":\"" + username + "\",\"password\":\"" + password + "\"}"))
-                .onComplete(testContext.succeeding(response -> {
-                    assertThat(response.statusCode()).isEqualTo(400);
+                .compose(ign -> whenSendingRequestForSignUpANewUser(vertx, username, password))
+                .onComplete(testContext.succeeding(response -> assertThat(response.statusCode()).isEqualTo(400)))
+                .compose(HttpClientResponse::body)
+                .onComplete(testContext.succeeding(buffer -> {
+                    assertThat(buffer.toJsonObject().getString("message")).isEqualTo("USERNAME_TAKEN");
                     testContext.completeNow();
                 }));
     }
 
     @Test
     void shouldLogIn(Vertx vertx, VertxTestContext testContext) {
-        HttpClient client = vertx.createHttpClient();
-
         givenAUser("test", "test")
-                .compose(ign ->
-                        client.request(HttpMethod.POST, 8888, "127.0.0.1", LOGIN_URI))
-                .compose(req -> {
-                    req.putHeader("content-type", "application/json");
-                    return req.send("{\"username\":\"test\",\"password\":\"test\"}");
-                })
+                .compose(ign -> whenSendingRequestForLogIn(vertx, "test", "test"))
                 .onComplete(testContext.succeeding(response -> {
                     assertThat(response.statusCode()).isEqualTo(200);
                     testContext.completeNow();
@@ -107,17 +91,11 @@ public class TestMainVerticle {
 
     @Test
     void shouldFailLogInIfUsernameAndPasswordAreNotCorrect(Vertx vertx, VertxTestContext testContext) {
-        HttpClient client = vertx.createHttpClient();
         var username = "test";
         var password = "testpw";
 
         givenAUser(username, "other-pw")
-                .compose(ign -> client.request(HttpMethod.POST, 8888, "127.0.0.1", LOGIN_URI))
-                .map(req -> {
-                    req.putHeader("content-type", "application/json");
-                    return req;
-                })
-                .compose(req -> req.send("{\"username\":\"" + username + "\",\"password\":\"" + password + "\"}"))
+                .compose(ign -> whenSendingRequestForLogIn(vertx, username, password))
                 .onComplete(testContext.succeeding(response -> {
                     assertThat(response.statusCode()).isEqualTo(400);
                     testContext.completeNow();
@@ -134,5 +112,31 @@ public class TestMainVerticle {
 
     private String givenAHashedPassword(String password) {
         return authenticationProvider.hash("sha512", "salt", password);
+    }
+
+    private Future<HttpClientResponse> whenSendingRequestForSignUpANewUser(Vertx vertx, String username, String password) {
+        HttpClient client = vertx.createHttpClient();
+
+        return client.request(HttpMethod.POST, 8888, "127.0.0.1", "/signup")
+                .compose(req -> {
+                    req.putHeader("content-type", "application/json");
+                    return req.send(new JsonObject()
+                            .put("username", username)
+                            .put("password", password)
+                            .encode());
+                });
+    }
+
+    private Future<HttpClientResponse> whenSendingRequestForLogIn(Vertx vertx, String username, String password) {
+        HttpClient client = vertx.createHttpClient();
+
+        return client.request(HttpMethod.POST, 8888, "127.0.0.1", "/login")
+                .compose(req -> {
+                    req.putHeader("content-type", "application/json");
+                    return req.send(new JsonObject()
+                            .put("username", username)
+                            .put("password", password)
+                            .encode());
+                });
     }
 }
