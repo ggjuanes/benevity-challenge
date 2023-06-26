@@ -2,6 +2,15 @@ POST http://127.0.0.1:8888/signup
 Content-Type: application/json
 
 {
-  "username": "test",
+  "username": "test4",
   "password": "test"
+}
+
+###
+POST http://127.0.0.1:8888/login
+Content-Type: application/json
+
+{
+"username": "test4",
+"password": "test"
 }

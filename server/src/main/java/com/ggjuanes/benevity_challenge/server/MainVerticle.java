@@ -1,14 +1,23 @@
 package com.ggjuanes.benevity_challenge.server;
 
+import com.ggjuanes.benevity_challenge.server.application.LogInService;
 import com.ggjuanes.benevity_challenge.server.application.SignUpService;
+import com.ggjuanes.benevity_challenge.server.infrastructure.LogInController;
 import com.ggjuanes.benevity_challenge.server.infrastructure.MongoDbUserService;
 import com.ggjuanes.benevity_challenge.server.infrastructure.SignUpController;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
+import io.vertx.core.json.JsonObject;
+import io.vertx.ext.auth.jwt.JWTAuth;
+import io.vertx.ext.auth.jwt.JWTAuthOptions;
+import io.vertx.ext.auth.mongo.MongoAuthentication;
+import io.vertx.ext.auth.mongo.MongoAuthenticationOptions;
+import io.vertx.ext.mongo.MongoClient;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.CorsHandler;
 import io.vertx.ext.web.openapi.RouterBuilder;
 import java.util.Optional;
+import static io.vertx.core.http.HttpMethod.*;
 
 public class MainVerticle extends AbstractVerticle {
     @Override
@@ -17,8 +26,18 @@ public class MainVerticle extends AbstractVerticle {
                 .orElseGet(() -> System.getProperty("MONGO_DB_CONNECTION_STRING"));
         var database = Optional.ofNullable(System.getenv("MONGO_DB_DATABASE"))
                 .orElseGet(() -> System.getProperty("MONGO_DB_DATABASE"));
+        var mongoClient = MongoClient.create(vertx, new JsonObject()
+                .put("connection_string", connectionString)
+                .put("db_name", database));
+        var signUpService = new SignUpService(new MongoDbUserService(mongoClient));
+        MongoAuthenticationOptions options = new MongoAuthenticationOptions();
+        options.setCollectionName("users");
+        MongoAuthentication authenticationProvider =
+                MongoAuthentication.create(mongoClient, options);
+        JWTAuthOptions config = new JWTAuthOptions();
+        JWTAuth provider = JWTAuth.create(vertx, config);
+        var logInService = new LogInService(authenticationProvider, provider);
 
-        var signUpService = new SignUpService(new MongoDbUserService(vertx, connectionString, database));
         RouterBuilder.create(vertx, "server.yaml")
                 .map(routerBuilder -> {
                     routerBuilder
@@ -26,10 +45,7 @@ public class MainVerticle extends AbstractVerticle {
                             .handler(SignUpController.create(signUpService));
                     routerBuilder
                             .operation("login")
-                            .handler(routingContext -> {
-                                routingContext.response().setStatusCode(200).end();
-                            });
-
+                            .handler(LogInController.create(logInService));
                     return routerBuilder;
                 })
                 .map(routerBuilder -> {
@@ -38,9 +54,9 @@ public class MainVerticle extends AbstractVerticle {
                     router.route()
                             .handler(CorsHandler.create()
                                     .addOrigin("http://127.0.0.1:8000/*")
-                                    .allowedMethod(io.vertx.core.http.HttpMethod.GET)
-                                    .allowedMethod(io.vertx.core.http.HttpMethod.POST)
-                                    .allowedMethod(io.vertx.core.http.HttpMethod.OPTIONS)
+                                    .allowedMethod(GET)
+                                    .allowedMethod(POST)
+                                    .allowedMethod(OPTIONS)
                                     .allowCredentials(true)
                                     .allowedHeader("Access-Control-Allow-Headers")
                                     .allowedHeader("Authorization")
