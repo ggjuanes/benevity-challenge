@@ -36,6 +36,7 @@ dependencies {
   implementation("io.vertx:vertx-auth-common:4.4.4")
   implementation("io.vertx:vertx-auth-mongo:4.4.4")
   implementation("io.vertx:vertx-auth-jwt:4.4.4")
+  implementation("com.fasterxml.jackson.core:jackson-databind:2.15.2")
   testImplementation("io.vertx:vertx-junit5")
   testImplementation("org.junit.jupiter:junit-jupiter:$junitJupiterVersion")
   testImplementation("org.assertj:assertj-core:3.24.2")
@@ -43,6 +44,7 @@ dependencies {
   testImplementation("org.testcontainers:testcontainers:1.18.3")
   testImplementation("org.testcontainers:junit-jupiter:1.18.3")
   testImplementation("org.testcontainers:mongodb:1.18.3")
+  testImplementation("org.apache.commons:commons-lang3:3.12.0")
 }
 
 java {

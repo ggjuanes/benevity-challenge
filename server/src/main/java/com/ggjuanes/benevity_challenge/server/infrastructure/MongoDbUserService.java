@@ -9,6 +9,7 @@ import io.vertx.ext.auth.mongo.MongoAuthenticationOptions;
 import io.vertx.ext.mongo.MongoClient;
 
 public class MongoDbUserService implements UserRepository {
+    public static final String USERS_COLLECTION_NAME = "users";
     private final MongoClient mongoClient;
 
     public MongoDbUserService(MongoClient mongoClient) {
@@ -18,7 +19,7 @@ public class MongoDbUserService implements UserRepository {
     @Override
     public Future<Void> save(User user) {
         MongoAuthenticationOptions options = new MongoAuthenticationOptions();
-        options.setCollectionName("users");
+        options.setCollectionName(USERS_COLLECTION_NAME);
         options.setUsernameField("username");
         options.setPasswordField("password");
 

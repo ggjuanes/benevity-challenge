@@ -62,4 +62,83 @@ paths:
                 properties:
                   message:
                     type: string
+  /posts:
+    get:
+      summary: Get all posts
+      description: Get all posts
+      operationId: getPosts
 
+      responses:
+        '200':
+          description: All posts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    title:
+                      type: string
+                    content:
+                      type: string
+                    name:
+                      type: string
+                    author:
+                      type: string
+    post:
+      summary: Create a post
+      description: Create a post
+      operationId: createPost
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                content:
+                  type: string
+                name:
+                  type: string
+      responses:
+        '201':
+          description: Post created
+  /posts/{title}:
+    parameters:
+      - name: title
+        in: path
+        required: true
+        description: The post title
+        schema:
+          type:
+            string
+    get:
+      summary: Get a post
+      description: Get a post
+      operationId: getPost
+
+      responses:
+        '200':
+          description: A post
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  title:
+                    type: string
+                  content:
+                    type: string
+                  name:
+                    type: string
+    delete:
+      summary: Delete a post
+      description: Delete a post
+      operationId: deletePost
+
+      responses:
+        '200':
+          description: Post deleted

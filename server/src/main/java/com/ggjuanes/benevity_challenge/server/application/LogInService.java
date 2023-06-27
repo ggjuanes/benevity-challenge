@@ -16,6 +16,7 @@ public class LogInService {
         this.jwtAuth = jwtAuth;
     }
     public Future<String> execute(String username, String password) {
+        // TODO: configure JWT expiration time and keys.
         return passwordAuthenticationProvider.authenticate(new UsernamePasswordCredentials(username, password))
                 .map(user -> jwtAuth.generateToken(
                         new JsonObject().put("sub", username), new JWTOptions()

@@ -23,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(VertxExtension.class)
 @Testcontainers
-public class TestMainVerticle {
+public class TestIntegration {
     final MongoDBContainer mongoDBContainer = new MongoDBContainer(DockerImageName.parse("mongo:4.0.10"));
     private MongoClient mongoClient;
     private MongoAuthentication authenticationProvider;
