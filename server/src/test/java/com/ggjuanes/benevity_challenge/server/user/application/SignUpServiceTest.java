@@ -1,8 +1,9 @@
-package com.ggjuanes.benevity_challenge.server.application;
+package com.ggjuanes.benevity_challenge.server.user.application;
 
-import com.ggjuanes.benevity_challenge.server.domain.User;
-import com.ggjuanes.benevity_challenge.server.domain.UserRepository;
-import com.ggjuanes.benevity_challenge.server.domain.UsernameTaken;
+import com.ggjuanes.benevity_challenge.server.user.application.SignUpService;
+import com.ggjuanes.benevity_challenge.server.user.domain.User;
+import com.ggjuanes.benevity_challenge.server.user.domain.UserRepository;
+import com.ggjuanes.benevity_challenge.server.user.domain.UsernameAlreadyTaken;
 import io.vertx.core.Future;
 import io.vertx.junit5.VertxExtension;
 import io.vertx.junit5.VertxTestContext;
@@ -45,7 +46,7 @@ class SignUpServiceTest {
         signUpService
                 .execute(usernameAlreadyExists, password)
                 .onFailure(err -> {
-                    assertThat(err).isInstanceOf(UsernameTaken.class);
+                    assertThat(err).isInstanceOf(UsernameAlreadyTaken.class);
                     // Then
                     verify(mockedUserRepository, never()).save(any());
 

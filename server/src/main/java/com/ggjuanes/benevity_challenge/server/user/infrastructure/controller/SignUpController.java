@@ -1,7 +1,7 @@
-package com.ggjuanes.benevity_challenge.server.infrastructure;
+package com.ggjuanes.benevity_challenge.server.user.infrastructure.controller;
 
-import com.ggjuanes.benevity_challenge.server.application.SignUpService;
-import com.ggjuanes.benevity_challenge.server.domain.UsernameTaken;
+import com.ggjuanes.benevity_challenge.server.user.application.SignUpService;
+import com.ggjuanes.benevity_challenge.server.user.domain.UsernameAlreadyTaken;
 import io.vertx.core.Handler;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.RoutingContext;
@@ -26,7 +26,7 @@ public class SignUpController implements Handler<RoutingContext> {
         signUpService.execute(username, password)
                 .compose(ok -> event.response().setStatusCode(201).end())
                 .onFailure(err -> {
-                    if (err instanceof UsernameTaken) {
+                    if (err instanceof UsernameAlreadyTaken) {
                         event
                                 .response()
                                 .setStatusCode(400)

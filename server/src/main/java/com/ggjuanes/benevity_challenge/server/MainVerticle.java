@@ -1,10 +1,10 @@
 package com.ggjuanes.benevity_challenge.server;
 
-import com.ggjuanes.benevity_challenge.server.application.LogInService;
-import com.ggjuanes.benevity_challenge.server.application.SignUpService;
-import com.ggjuanes.benevity_challenge.server.infrastructure.LogInController;
-import com.ggjuanes.benevity_challenge.server.infrastructure.MongoDbUserService;
-import com.ggjuanes.benevity_challenge.server.infrastructure.SignUpController;
+import com.ggjuanes.benevity_challenge.server.user.application.LogInService;
+import com.ggjuanes.benevity_challenge.server.user.application.SignUpService;
+import com.ggjuanes.benevity_challenge.server.user.infrastructure.controller.LogInController;
+import com.ggjuanes.benevity_challenge.server.user.infrastructure.persistence.MongoDbUserRepository;
+import com.ggjuanes.benevity_challenge.server.user.infrastructure.controller.SignUpController;
 import com.ggjuanes.benevity_challenge.server.post.application.CreatePost;
 import com.ggjuanes.benevity_challenge.server.post.application.DeletePost;
 import com.ggjuanes.benevity_challenge.server.post.application.FetchPost;
@@ -32,6 +32,7 @@ import java.util.Optional;
 
 import static io.vertx.core.http.HttpMethod.*;
 
+// TODO: when growing, move Main verticle to a 'shared' or service module.
 public class MainVerticle extends AbstractVerticle {
 
     @Override
@@ -44,13 +45,13 @@ public class MainVerticle extends AbstractVerticle {
                 .put("db_name", database));
         var authenticationProvider =
                 MongoAuthentication.create(mongoClient, new MongoAuthenticationOptions()
-                        .setCollectionName(MongoDbUserService.USERS_COLLECTION_NAME));
+                        .setCollectionName(MongoDbUserRepository.USERS_COLLECTION_NAME));
         var provider = JWTAuth.create(vertx, new JWTAuthOptions());
         var authenticationHandler = JWTAuthHandler.create(provider);
 
         var mongoDbPostReadRepository = new MongoDbPostReadRepository(mongoClient);
         var mongoDbPostRepository = new MongoDbPostRepository(mongoClient);
-        var mongoDbUserService = new MongoDbUserService(mongoClient);
+        var mongoDbUserService = new MongoDbUserRepository(mongoClient);
 
         RouterBuilder.create(vertx, "server.yaml")
                 .map(routerBuilder -> {

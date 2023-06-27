@@ -1,5 +1,6 @@
-package com.ggjuanes.benevity_challenge.server;
+package com.ggjuanes.benevity_challenge.server.user;
 
+import com.ggjuanes.benevity_challenge.server.MainVerticle;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpClient;
@@ -23,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(VertxExtension.class)
 @Testcontainers
-public class TestIntegration {
+public class TestIntegrationUser {
     final MongoDBContainer mongoDBContainer = new MongoDBContainer(DockerImageName.parse("mongo:4.0.10"));
     private MongoClient mongoClient;
     private MongoAuthentication authenticationProvider;

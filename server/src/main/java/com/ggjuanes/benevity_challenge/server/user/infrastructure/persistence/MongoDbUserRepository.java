@@ -1,18 +1,18 @@
-package com.ggjuanes.benevity_challenge.server.infrastructure;
+package com.ggjuanes.benevity_challenge.server.user.infrastructure.persistence;
 
-import com.ggjuanes.benevity_challenge.server.domain.User;
-import com.ggjuanes.benevity_challenge.server.domain.UserRepository;
+import com.ggjuanes.benevity_challenge.server.user.domain.User;
+import com.ggjuanes.benevity_challenge.server.user.domain.UserRepository;
 import io.vertx.core.Future;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.auth.mongo.MongoAuthentication;
 import io.vertx.ext.auth.mongo.MongoAuthenticationOptions;
 import io.vertx.ext.mongo.MongoClient;
 
-public class MongoDbUserService implements UserRepository {
+public class MongoDbUserRepository implements UserRepository {
     public static final String USERS_COLLECTION_NAME = "users";
     private final MongoClient mongoClient;
 
-    public MongoDbUserService(MongoClient mongoClient) {
+    public MongoDbUserRepository(MongoClient mongoClient) {
         this.mongoClient = mongoClient;
     }
 
@@ -26,6 +26,7 @@ public class MongoDbUserService implements UserRepository {
         MongoAuthentication authenticationProvider =
                 MongoAuthentication.create(mongoClient, options);
 
+        // TODO: use a random salt
         String passwordHash = authenticationProvider.hash("sha512", "salt", user.password());
 
         // @TODO: use serialization instead of getters

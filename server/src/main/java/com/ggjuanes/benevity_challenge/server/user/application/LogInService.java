@@ -1,4 +1,4 @@
-package com.ggjuanes.benevity_challenge.server.application;
+package com.ggjuanes.benevity_challenge.server.user.application;
 
 import io.vertx.core.Future;
 import io.vertx.core.json.JsonObject;
@@ -19,6 +19,7 @@ public class LogInService {
         // TODO: configure JWT expiration time and keys.
         return passwordAuthenticationProvider.authenticate(new UsernamePasswordCredentials(username, password))
                 .map(user -> jwtAuth.generateToken(
+                        // TODO: add claims to the token. Consider user serialization
                         new JsonObject().put("sub", username), new JWTOptions()
                 ));
     }

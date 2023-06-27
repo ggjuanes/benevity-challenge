@@ -1,8 +1,8 @@
-package com.ggjuanes.benevity_challenge.server.application;
+package com.ggjuanes.benevity_challenge.server.user.application;
 
-import com.ggjuanes.benevity_challenge.server.domain.User;
-import com.ggjuanes.benevity_challenge.server.domain.UserRepository;
-import com.ggjuanes.benevity_challenge.server.domain.UsernameTaken;
+import com.ggjuanes.benevity_challenge.server.user.domain.User;
+import com.ggjuanes.benevity_challenge.server.user.domain.UserRepository;
+import com.ggjuanes.benevity_challenge.server.user.domain.UsernameAlreadyTaken;
 import io.vertx.core.Future;
 
 public class SignUpService {
@@ -15,12 +15,11 @@ public class SignUpService {
     public Future<Void> execute(String username, String password) {
         // TODO: Check if username is valid
         // TODO: Check if password is valid
-        // TODO: Hash password
         return userRepository
                 .exists(username)
                 .map(exists -> {
                     if (exists) {
-                        throw new UsernameTaken();
+                        throw new UsernameAlreadyTaken();
                     }
                     return null;
                 })

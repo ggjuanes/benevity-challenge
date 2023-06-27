@@ -1,6 +1,6 @@
-package com.ggjuanes.benevity_challenge.server.infrastructure;
+package com.ggjuanes.benevity_challenge.server.user.infrastructure.controller;
 
-import com.ggjuanes.benevity_challenge.server.application.LogInService;
+import com.ggjuanes.benevity_challenge.server.user.application.LogInService;
 import io.vertx.core.Handler;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.RoutingContext;
@@ -18,6 +18,7 @@ public class LogInController implements Handler<RoutingContext> {
 
     @Override
     public void handle(RoutingContext event) {
+        // TODO: validate body
         JsonObject body = event.body().asJsonObject();
         String username = body.getString("username");
         String password = body.getString("password");
