@@ -23,8 +23,8 @@ public class SignUpController implements Handler<RoutingContext> {
     @Override
     public void handle(RoutingContext event) {
         JsonObject body = event.body().asJsonObject();
-        String username = body.getJsonObject("post").getString("username");
-        String password = body.getJsonObject("post").getString("password");
+        String username = body.getString("username");
+        String password = body.getString("password");
 
         logger.info("username: {}", username);
 

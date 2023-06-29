@@ -20,8 +20,8 @@ public class LogInController implements Handler<RoutingContext> {
     public void handle(RoutingContext event) {
         // TODO: validate body
         JsonObject body = event.body().asJsonObject();
-        String username = body.getJsonObject("post").getString("username");
-        String password = body.getJsonObject("post").getString("password");
+        String username = body.getString("username");
+        String password = body.getString("password");
 
         logInService.execute(username, password)
                 .compose(token -> event.response().setStatusCode(200).end(

@@ -6,10 +6,8 @@ export const SIGNUP_SUCCESS = 'SIGNUP_SUCCESS';
 export function loginRequest(user) {
     return (dispatch) => {
         return callApi('login', HTTP_METHODS.POST, {
-            post: {
                 username: user.username,
                 password: user.password
-            },
         }).then(res => {
             // TODO: handle error case
             // TODO: handle when JWT is expired and reset user.login.token
@@ -22,10 +20,8 @@ export function loginRequest(user) {
 export function signUpRequest(user) {
     return (dispatch) => {
         return callApi('signup', HTTP_METHODS.POST, {
-            post: {
                 username: user.username,
                 password: user.password
-            },
         }).then(() => {
             // TODO: handle error case
             return dispatch(signUpSuccess());
