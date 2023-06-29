@@ -1,32 +1,30 @@
-= Server
+# 🏃🏼Benevity Challenge - Server
 
-image:https://img.shields.io/badge/vert.x-4.4.4-purple.svg[link="https://vertx.io"]
+## API
+API documentation is available as OpenAPI sepc in `api.yaml` file.
+Examples of HTTP request can be found on `api.http` file.
 
-This application was generated using http://start.vertx.io
+## Prepare environment
 
-== Building
+1. Set java version
+   ```shell
+   jenv local
+   ```
 
-To launch your tests:
-```
-./gradlew clean test
-```
+2. Run tests
+    ```shell
+    ./gradlew clean test
+   ```
 
-To package your application:
-```
-./gradlew clean assemble
-```
+> In order to run, MongoDB database must be running. Check main README.md file.
+3. Run server
+   ```shell
+    ./gradlew clean run
+    ```
+   
+4. Execute request defined on `api.http` file
 
-To run your application:
-```
-./gradlew clean run
-```
+## Improvements
 
-== Help
-
-* https://vertx.io/docs/[Vert.x Documentation]
-* https://stackoverflow.com/questions/tagged/vert.x?sort=newest&pageSize=15[Vert.x Stack Overflow]
-* https://groups.google.com/forum/?fromgroups#!forum/vertx[Vert.x User Group]
-* https://discord.gg/6ry7aqPWXy[Vert.x Discord]
-* https://gitter.im/eclipse-vertx/vertx-users[Vert.x Gitter]
-
-
+- HTTP parameters and request: parse and validate correctly.
+- Improve error handling, having a default error handler and mapping domain exceptions.

@@ -5,9 +5,12 @@ import com.ggjuanes.benevity_challenge.server.post.domain.PostDoesNotBelongToUse
 import com.ggjuanes.benevity_challenge.server.post.domain.PostNotFound;
 import io.vertx.core.Handler;
 import io.vertx.ext.web.RoutingContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DeletePostController implements Handler<RoutingContext> {
     private final DeletePost deletePost;
+    private final Logger logger = LoggerFactory.getLogger(DeletePostController.class);
 
     private DeletePostController(DeletePost deletePost) {
         this.deletePost = deletePost;
@@ -32,6 +35,7 @@ public class DeletePostController implements Handler<RoutingContext> {
                     } else if (err instanceof PostDoesNotBelongToUser) {
                         event.response().setStatusCode(403).end();
                     }
+                    logger.error("Error deleting post", err);
                 });
     }
 }

@@ -14,3 +14,19 @@ Content-Type: application/json
 "username": "test4",
 "password": "test"
 }
+
+### eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJndWlsbGUiLCJpYXQiOjE2ODc4Nzk4NTJ9
+POST http://127.0.0.1:8888/posts
+Authorization: Bearer <REPLACE_TOKEN>
+Content-Type: application/json
+
+{
+  "title": "fake",
+  "content": "test",
+  "name": "fake name"
+}
+
+###
+GET http://127.0.0.1:8888/posts
+Authorization: Bearer <REPLACE_TOKEN>
+Content-Type: application/json
