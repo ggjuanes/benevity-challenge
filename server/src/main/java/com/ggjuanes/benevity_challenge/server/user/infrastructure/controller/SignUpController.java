@@ -5,9 +5,12 @@ import com.ggjuanes.benevity_challenge.server.user.domain.UsernameAlreadyTaken;
 import io.vertx.core.Handler;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.RoutingContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SignUpController implements Handler<RoutingContext> {
     private final SignUpService signUpService;
+    private final Logger logger = LoggerFactory.getLogger(SignUpController.class);
 
     private SignUpController(SignUpService signUpService) {
         this.signUpService = signUpService;
@@ -20,8 +23,10 @@ public class SignUpController implements Handler<RoutingContext> {
     @Override
     public void handle(RoutingContext event) {
         JsonObject body = event.body().asJsonObject();
-        String username = body.getString("username");
-        String password = body.getString("password");
+        String username = body.getJsonObject("post").getString("username");
+        String password = body.getJsonObject("post").getString("password");
+
+        logger.info("username: {}", username);
 
         signUpService.execute(username, password)
                 .compose(ok -> event.response().setStatusCode(201).end())

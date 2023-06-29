@@ -1,6 +1,5 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.gradle.api.tasks.testing.logging.TestLogEvent.*
-import java.util.regex.Pattern.compile
 
 plugins {
   java
@@ -37,6 +36,7 @@ dependencies {
   implementation("io.vertx:vertx-auth-mongo:4.4.4")
   implementation("io.vertx:vertx-auth-jwt:4.4.4")
   implementation("com.fasterxml.jackson.core:jackson-databind:2.15.2")
+  implementation("ch.qos.logback:logback-classic:1.4.8")
   testImplementation("io.vertx:vertx-junit5")
   testImplementation("org.junit.jupiter:junit-jupiter:$junitJupiterVersion")
   testImplementation("org.assertj:assertj-core:3.24.2")
