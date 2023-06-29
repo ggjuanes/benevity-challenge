@@ -1,38 +1,47 @@
-import callApi from "../util/apiCaller";
+import callApi, {HTTP_METHODS} from "../util/apiCaller";
 
-export const ADD_TOKEN = 'ADD_TOKEN';
+export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
+export const SIGNUP_SUCCESS = 'SIGNUP_SUCCESS';
 
 export function loginRequest(user) {
     return (dispatch) => {
-        return callApi('login', 'post', {
+        return callApi('login', HTTP_METHODS.POST, {
             post: {
                 username: user.username,
                 password: user.password
             },
         }).then(res => {
-            user.isLogged = true;
-            return dispatch(addToken(res.token));
+            // TODO: handle error case
+            // TODO: handle when JWT is expired and reset user.login.token
+            localStorage.setItem('token', res.token);
+            return dispatch(logInSuccess(res.token));
         });
     };
 }
 
 export function signUpRequest(user) {
     return (dispatch) => {
-        return callApi('signup', 'post', {
+        return callApi('signup', HTTP_METHODS.POST, {
             post: {
                 username: user.username,
                 password: user.password
             },
-        }).then(res => {
-            user.isLogged = true;
-            return dispatch(addToken(res.token));
+        }).then(() => {
+            // TODO: handle error case
+            return dispatch(signUpSuccess());
         });
     };
 }
 
-export function addToken(token) {
+function signUpSuccess() {
     return {
-        type: ADD_TOKEN,
+        type: SIGNUP_SUCCESS,
+    };
+}
+
+function logInSuccess(token) {
+    return {
+        type: LOGIN_SUCCESS,
         token,
     };
 }

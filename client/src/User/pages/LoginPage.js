@@ -1,13 +1,12 @@
 import React, {useState} from 'react';
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import Logo from "../../logo.svg";
 import {useDispatch, useSelector} from "react-redux";
-import {loginRequest, signUpRequest} from "../UserActions";
+import {loginRequest} from "../UserActions";
 
 const LoginPage = () => {
     const dispatch = useDispatch();
-    const isLogged = useSelector(state => state.user.isLogged);
+    const logInSuccess = useSelector(state => state.user.login.success);
     const [state, setState] = useState({});
 
     const handleChange = (evt) => {
@@ -19,21 +18,12 @@ const LoginPage = () => {
     };
 
     const submit = () => {
-        console.log(state);
         dispatch(loginRequest(state));
     }
 
     return (
         <div className="container">
-            <div className="row">
-                <div className="col-12 d-flex align-items-center">
-                    <img className="mx-3" src={Logo} alt="Logo" style={{height: '72px'}}/>
-                    <h1 className="mt-4">
-                        Alaya Blog
-                    </h1>
-                </div>
-            </div>
-            {isLogged?
+            {logInSuccess?
                 (
                     <div className="row">
                         <div className={`d-flex flex-column my-4 w-100 col-6 user-logged-in`}>

@@ -1,15 +1,25 @@
 // Initial State
-import {ADD_TOKEN} from "./UserActions";
+import {SIGNUP_SUCCESS, LOGIN_SUCCESS} from "./UserActions";
 
-const initialState = { isLogged: false, token: null };
+const initialState = { login: {success:false, token: null}, signup: {success: false} };
 
 const UserReducer = (state = initialState, action) => {
   switch (action.type) {
-    case ADD_TOKEN:
+    case LOGIN_SUCCESS:
       return {
-        token: action.token,
-        isLogged: true
+        ...state,
+        login: {
+          success: true,
+          token: action.token,
+        },
       };
+    case SIGNUP_SUCCESS:
+      return {
+        ...state,
+        signup: {
+            success: true
+        }
+      }
     default:
       return state;
   }

@@ -1,4 +1,4 @@
-import callApi from '../util/apiCaller';
+import callApi, {HTTP_METHODS} from '../util/apiCaller';
 
 // Export Constants
 export const ADD_POST = 'ADD_POST';
@@ -7,54 +7,59 @@ export const DELETE_POST = 'DELETE_POST';
 
 // Export Actions
 export function addPost(post) {
-  return {
-    type: ADD_POST,
-    post,
-  };
+    return {
+        type: ADD_POST,
+        post,
+    };
 }
 
-export function addPostRequest(post) {
-  return (dispatch) => {
-    return callApi('posts', 'post', {
-      post: {
-        name: post.name,
-        title: post.title,
-        content: post.content,
-      },
-    }).then(res => dispatch(addPost(res.post)));
-  };
+export function addPostRequest(post, token) {
+    return (dispatch) => {
+        return callApi('posts', 'post', {
+            name: post.name,
+            title: post.title,
+            content: post.content,
+        }, token).then(() => dispatch(addPost(post)));
+    };
 }
 
 export function addPosts(posts) {
-  return {
-    type: ADD_POSTS,
-    posts,
-  };
+    return {
+        type: ADD_POSTS,
+        posts,
+    };
 }
 
-export function fetchPosts() {
-  return (dispatch) => {
-    return callApi('posts').then(res => {
-      dispatch(addPosts(res.posts));
-    });
-  };
+export function fetchPosts(token) {
+    return (dispatch) => {
+        return callApi('posts', HTTP_METHODS.GET, undefined, token).then(res => {
+            dispatch(addPosts(res));
+        });
+    };
 }
 
-export function fetchPost(cuid) {
-  return (dispatch) => {
-    return callApi(`posts/${cuid}`).then(res => dispatch(addPost(res.post)));
-  };
+export function fetchPost(token, title) {
+    return (dispatch) => {
+        return callApi(`posts/${title}`, HTTP_METHODS.GET, undefined, token).then(res => dispatch(addPost(res.post)));
+    };
 }
 
-export function deletePost(cuid) {
-  return {
-    type: DELETE_POST,
-    cuid,
-  };
+export function deletePost(title) {
+    return {
+        type: DELETE_POST,
+        title,
+    };
 }
 
-export function deletePostRequest(cuid) {
-  return (dispatch) => {
-    return callApi(`posts/${cuid}`, 'delete').then(() => dispatch(deletePost(cuid)));
-  };
+export function deletePostRequest(token, title) {
+    return (dispatch) => {
+        return callApi(`posts/${title}`, 'delete', undefined, token)
+            .catch((err) => {
+              console.log(err);
+            })
+            .then((response) => {
+            console.log(response);
+            return dispatch(deletePost(title));
+        });
+    };
 }

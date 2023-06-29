@@ -5,15 +5,15 @@ import { fetchPost } from '../../PostActions';
 // Import Selectors
 import { useParams } from 'react-router-dom';
 
-export function PostDetailPage() {
+export function PostDetailPage(token) {
 
-  const { cuid } = useParams();
-  const post = useSelector(state => state.posts.data.find(currentPost => (currentPost.cuid === cuid)));
+  const { title } = useParams();
+  const post = useSelector(state => state.posts.data.find(currentPost => (currentPost.title === title)));
   const dispatch = useDispatch();
 
 
   useEffect(() => {
-    if (!post) dispatch(fetchPost(cuid));
+    if (!post) dispatch(fetchPost(token, title));
   }, []);
 
   return (post

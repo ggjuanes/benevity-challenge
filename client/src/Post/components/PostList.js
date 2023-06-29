@@ -12,8 +12,8 @@ function PostList(props) {
         props.posts.map(post => (
           <PostListItem
             post={post}
-            key={post.cuid}
-            onDelete={() => props.handleDeletePost(post.cuid)}
+            key={post.title}
+            onDelete={() => props.handleDeletePost(post.title)}
           />
         ))
       }
@@ -26,8 +26,6 @@ PostList.propTypes = {
     name: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     content: PropTypes.string.isRequired,
-    slug: PropTypes.string.isRequired,
-    cuid: PropTypes.string.isRequired,
   })).isRequired,
   handleDeletePost: PropTypes.func.isRequired,
 };
