@@ -28,6 +28,7 @@ import io.vertx.ext.web.handler.CorsHandler;
 import io.vertx.ext.web.handler.JWTAuthHandler;
 import io.vertx.ext.web.openapi.RouterBuilder;
 
+import java.util.List;
 import java.util.Optional;
 
 import static io.vertx.core.http.HttpMethod.*;
@@ -79,7 +80,10 @@ public class MainVerticle extends AbstractVerticle {
                     Router router = Router.router(vertx);
                     router.route()
                             .handler(CorsHandler.create()
-                                    .addOrigin("http://127.0.0.1:8000/*")
+                                    .addOrigins(List.of(
+                                            "http://localhost:8000/*",
+                                            "http://127.0.0.1:8000/*"
+                                    ))
                                     .allowedMethod(GET)
                                     .allowedMethod(POST)
                                     .allowedMethod(DELETE)
